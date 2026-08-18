@@ -1,40 +1,1211 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>SkillMint — Login & Courses</title>
-<meta name="description" content="SkillMint — Learn skills, enroll in bundles, and track progress." />
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0,
+      maximum-scale=1.0,user-scalable=no">
+
+<title>DemoSpin — Browser Storage Demo</title>
+
 <style>
-:root{
-  --mint:#3EB489; --teal:#2CA58D; --muted:#7b8088; --card:#ffffff; --bg:#f6faf8;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
 }
-html,body{height:100%}
+
 body{
-  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  background:var(--bg); color:#0f1720;
-  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    background:#042d31;
+    color:white;
+    min-height:100vh;
 }
-.app-wrapper{max-width:920px; margin:0 auto; padding:18px;}
-.hero-illustration{background:#eaf7f2; border-radius:14px; padding:18px; display:flex; align-items:center; justify-content:center}
-.hero-illustration img{max-width:100%; height:auto; border-radius:12px}
-.form-card{background:var(--card); border-radius:14px; padding:18px; box-shadow:0 8px 30px rgba(9,10,12,.06);}
-.input-icon{width:44px; height:44px; display:inline-flex; align-items:center; justify-content:center; background:#f0f3f2; border-radius:10px; margin-right:10px}
-.form-control{border-radius:10px; padding:12px 14px;}
-.btn-mint{background:var(--mint); color:#fff; border-radius:10px; padding:10px 16px; font-weight:600}
-.btn-ghost{background:transparent; border:1px solid rgba(15,17,32,.06); border-radius:10px; padding:10px 14px}
-.h1-hero{font-size:28px; font-weight:700; margin:12px 0}
-@media(min-width:768px){ .h1-hero{font-size:34px} }
-.bundle-card{border-radius:14px; overflow:hidden; background:#fff; box-shadow:0 10px 30px rgba(11,12,13,.06); border:1px solid rgba(9,10,12,.02); cursor:pointer;}
-.bundle-card img{width:100%; height:140px; object-fit:cover}
-.rating-stars{color:#f6b400}
-.bundle-selected{border:2px solid var(--mint);}
-footer .muted{color:var(--muted); font-size:14px}
-.gap-12{gap:12px}
-.mt-18{margin-top:18px}
-.rounded-12{border-radius:12px}
+
+button{
+    font-family:inherit;
+    cursor:pointer;
+}
+
+.header{
+    height:68px;
+    background:#071e22;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 15px;
+    position:sticky;
+    top:0;
+    z-index:20;
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.logo{
+    font-size:22px;
+    font-weight:bold;
+    color:#21d5d5;
+}
+
+.player{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+.avatar{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#ffcf45,#ff5b65);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+}
+
+.player small{
+    display:block;
+    color:#8caeb0;
+    font-size:10px;
+}
+
+.balance{
+    background:#102f32;
+    border:1px solid #1c5559;
+    padding:9px 13px;
+    border-radius:25px;
+    color:#ffd34e;
+    font-weight:bold;
+}
+
+.hero{
+    margin:18px;
+    height:155px;
+    border-radius:16px;
+    background:
+      radial-gradient(circle at 70% 30%,#ffca4d 0,#ff8b22 15%,transparent 40%),
+      linear-gradient(135deg,#5b167b,#ef4b88,#ffb52d);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    overflow:hidden;
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+
+.hero h1{
+    font-size:32px;
+    text-shadow:3px 4px 0 #8a241c;
+}
+
+.hero p{
+    margin-top:7px;
+    font-size:14px;
+}
+
+.categories{
+    display:flex;
+    gap:10px;
+    overflow-x:auto;
+    padding:4px 18px 15px;
+}
+
+.category{
+    min-width:80px;
+    padding:10px;
+    border-radius:12px;
+    text-align:center;
+    background:#0c3d40;
+    color:#a7c7c8;
+}
+
+.category.active{
+    color:#22d5d7;
+    border-bottom:3px solid #18cbd0;
+}
+
+.section-title{
+    padding:8px 18px 12px;
+    font-size:20px;
+}
+
+.games{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    padding:0 18px 100px;
+}
+
+.game{
+    border-radius:15px;
+    overflow:hidden;
+    background:#123b3e;
+    border:1px solid rgba(255,255,255,.08);
+    transition:.2s;
+}
+
+.game:hover{
+    transform:translateY(-3px);
+}
+
+.game-img{
+    height:135px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:50px;
+    background:linear-gradient(145deg,#f5a51c,#d83b22);
+}
+
+.game:nth-child(2) .game-img{
+    background:linear-gradient(145deg,#f1c13b,#d86d20);
+}
+
+.game:nth-child(3) .game-img{
+    background:linear-gradient(145deg,#ec7197,#7d3ba8);
+}
+
+.game:nth-child(4) .game-img{
+    background:linear-gradient(145deg,#d77a28,#963d1c);
+}
+
+.game:nth-child(5) .game-img{
+    background:linear-gradient(145deg,#f27eb7,#7545bd);
+}
+
+.game:nth-child(6) .game-img{
+    background:linear-gradient(145deg,#4cbbdf,#2856ad);
+}
+
+.game-name{
+    padding:9px;
+    text-align:center;
+    font-weight:bold;
+}
+
+.game button{
+    width:90%;
+    margin:0 5% 10px;
+    padding:8px;
+    border:0;
+    border-radius:20px;
+    background:#16cbd0;
+    color:#05282b;
+    font-weight:bold;
+}
+
+.bottom{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    height:72px;
+    background:#061f23;
+    border-top:1px solid rgba(255,255,255,.1);
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    z-index:30;
+}
+
+.nav{
+    text-align:center;
+    color:#839b9d;
+    font-size:11px;
+}
+
+.nav span{
+    display:block;
+    font-size:23px;
+    margin-bottom:3px;
+}
+
+.nav.active{
+    color:#19d1d4;
+}
+
+/* MODAL */
+
+.overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.72);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:100;
+    padding:20px;
+}
+
+.modal{
+    width:100%;
+    max-width:420px;
+    background:#263133;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 20px 70px rgba(0,0,0,.7);
+}
+
+.modal-head{
+    padding:18px;
+    background:linear-gradient(90deg,#6124a1,#8428a5);
+    font-size:23px;
+    font-weight:bold;
+}
+
+.modal-body{
+    padding:22px;
+}
+
+.modal-body p{
+    color:#ddd;
+    line-height:1.6;
+    margin-bottom:18px;
+}
+
+.reward{
+    font-size:32px;
+    text-align:center;
+    color:#ffc338;
+    font-weight:bold;
+    margin:15px;
+}
+
+.modal-btn{
+    width:100%;
+    border:0;
+    border-radius:10px;
+    padding:14px;
+    background:#ffb21c;
+    color:#251600;
+    font-weight:bold;
+    font-size:17px;
+}
+
+.close{
+    width:100%;
+    margin-top:10px;
+    border:0;
+    background:#4a5557;
+    color:white;
+    padding:12px;
+    border-radius:10px;
+}
+
+/* GAME */
+
+.slot{
+    padding:15px;
+}
+
+.reels{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    margin-bottom:18px;
+}
+
+.reel{
+    height:115px;
+    border-radius:12px;
+    background:#e9c276;
+    color:#741c1c;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:50px;
+    border:4px solid #9e311f;
+}
+
+.bet-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:#40191b;
+    padding:10px;
+    border-radius:10px;
+}
+
+.spin{
+    margin-top:15px;
+    width:100%;
+    padding:16px;
+    border:0;
+    border-radius:30px;
+    background:linear-gradient(90deg,#ffbe21,#ff6c24);
+    color:#321500;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.result{
+    min-height:30px;
+    text-align:center;
+    margin-top:12px;
+    color:#ffd34e;
+    font-weight:bold;
+}
+
+/* STORAGE PANEL */
+
+.storage{
+    padding:20px;
+    margin:15px;
+    background:#092a2e;
+    border-radius:15px;
+    border:1px solid #16494d;
+}
+
+.storage h3{
+    margin-bottom:12px;
+}
+
+.storage code{
+    display:block;
+    word-break:break-all;
+    color:#72e9e9;
+    background:#041b1e;
+    padding:10px;
+    border-radius:8px;
+    margin:8px 0;
+}
+
+.danger{
+    margin-top:10px;
+    background:#c43b3b;
+    color:white;
+    border:0;
+    padding:11px 15px;
+    border-radius:8px;
+}
+
+/* DESKTOP */
+
+@media(max-width:600px){
+    .games{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .game-img{
+        height:115px;
+    }
+
+    .game-name{
+        font-size:12px;
+    }
+
+    .hero h1{
+        font-size:27px;
+    }
+}
+
+@media(min-width:800px){
+    .games{
+        grid-template-columns:repeat(4,1fr);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="logo">
+        DEMOSPIN
+    </div>
+
+    <div class="player">
+
+        <div class="avatar">
+            P
+        </div>
+
+        <div>
+            <b id="username">player</b>
+            <small id="playerId"></small>
+        </div>
+
+        <div class="balance">
+            ₹<span id="balance">0.00</span>
+        </div>
+
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div>
+        <h1>WELCOME BONUS</h1>
+        <p>Browser Storage & Casino UI Demo</p>
+    </div>
+
+</section>
+
+
+<div class="categories">
+
+    <div class="category active">🎰<br>Games</div>
+    <div class="category">🔥<br>Hot</div>
+    <div class="category">⭐<br>Popular</div>
+    <div class="category">🆕<br>New</div>
+
+</div>
+
+
+<h2 class="section-title">
+    Demo Games
+</h2>
+
+
+<section class="games">
+
+    <div class="game">
+
+        <div class="game-img">🐯</div>
+
+        <div class="game-name">
+            Fortune Tiger
+        </div>
+
+        <button onclick="openGame('Fortune Tiger')">
+            PLAY DEMO
+        </button>
+
+    </div>
+
+
+    <div class="game">
+
+        <div class="game-img">🐂</div>
+
+        <div class="game-name">
+            Fortune Ox
+        </div>
+
+        <button onclick="openGame('Fortune Ox')">
+            PLAY DEMO
+        </button>
+
+    </div>
+
+
+    <div class="game">
+
+        <div class="game-img">🐰</div>
+
+        <div class="game-name">
+            Fortune Rabbit
+        </div>
+
+        <button onclick="openGame('Fortune Rabbit')">
+            PLAY DEMO
+        </button>
+
+    </div>
+
+
+    <div class="game">
+
+        <div class="game-img">🐷</div>
+
+        <div class="game-name">
+            Lucky Pig
+        </div>
+
+        <button onclick="openGame('Lucky Pig')">
+            PLAY DEMO
+        </button>
+
+    </div>
+
+
+    <div class="game">
+
+        <div class="game-img">🍭</div>
+
+        <div class="game-name">
+            Candy Dream
+        </div>
+
+        <button onclick="openGame('Candy Dream')">
+            PLAY DEMO
+        </button>
+
+    </div>
+
+
+    <div class="game">
+
+        <div class="game-img">🐱</div>
+
+        <div class="game-name">
+            Lucky Cat
+        </div>
+
+        <button onclick="openGame('Lucky Cat')">
+            PLAY DEMO
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- STORAGE DEMONSTRATION -->
+
+<div class="storage">
+
+    <h3>🔬 Browser Storage Demo</h3>
+
+    <p>
+        This section lets you see what this demo saves locally
+        in your browser.
+    </p>
+
+    <code id="storageDisplay">
+        Loading...
+    </code>
+
+    <button class="danger" onclick="clearBrowserData()">
+        Clear Demo Browser Data
+    </button>
+
+</div>
+
+
+<!-- PROMOTION -->
+
+<div class="overlay" id="bonusModal">
+
+    <div class="modal">
+
+        <div class="modal-head">
+            🎁 Welcome!
+        </div>
+
+        <div class="modal-body">
+
+            <p>
+                This is a demonstration of how a website can
+                show a welcome promotion using browser storage.
+            </p>
+
+            <div class="reward">
+                ₹150 DEMO CREDIT
+            </div>
+
+            <button class="modal-btn"
+                    onclick="claimBonus()">
+                RECEIVE DEMO CREDIT
+            </button>
+
+            <button class="close"
+                    onclick="closeModal('bonusModal')">
+                Close
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- GAME -->
+
+<div class="overlay" id="gameModal">
+
+    <div class="modal">
+
+        <div class="modal-head">
+            🎰 <span id="gameTitle">Demo Game</span>
+        </div>
+
+        <div class="modal-body">
+
+            <div class="slot">
+
+                <div class="reels">
+
+                    <div class="reel" id="r1">🐯</div>
+                    <div class="reel" id="r2">🍊</div>
+                    <div class="reel" id="r3">💰</div>
+
+                </div>
+
+                <div class="bet-row">
+
+                    <span>Demo Bet</span>
+
+                    <b>
+                        ₹<span id="bet">5.00</span>
+                    </b>
+
+                </div>
+
+                <button class="spin"
+                        onclick="spinGame()">
+                    SPIN
+                </button>
+
+                <div class="result" id="result"></div>
+
+            </div>
+
+            <button class="close"
+                    onclick="closeModal('gameModal')">
+                Exit Game
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- DEPOSIT DEMO -->
+
+<div class="overlay" id="depositModal">
+
+    <div class="modal">
+
+        <div class="modal-head">
+            💳 Payment Flow Demo
+        </div>
+
+        <div class="modal-body">
+
+            <p>
+                A real-money website could redirect a user
+                to another payment service here.
+            </p>
+
+            <div class="reward">
+                ₹199.25
+            </div>
+
+            <p>
+                This demo deliberately does NOT create a
+                real payment request or accept money.
+            </p>
+
+            <button class="modal-btn"
+                    onclick="closeModal('depositModal')">
+                UNDERSTAND
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<nav class="bottom">
+
+    <div class="nav active">
+        <span>🏠</span>
+        Casino
+    </div>
+
+    <div class="nav"
+         onclick="showBonus()">
+        <span>🎁</span>
+        Bonus
+    </div>
+
+    <div class="nav"
+         onclick="showDeposit()">
+        <span>💳</span>
+        Deposit
+    </div>
+
+    <div class="nav"
+         onclick="showStorage()">
+        <span>⚙️</span>
+        Storage
+    </div>
+
+</nav>
+
+
+<script>
+
+/*
+==================================================
+  DEMOSPIN
+  BROWSER STORAGE DEMONSTRATION
+==================================================
+
+  Everything here is fake.
+
+  No real money.
+  No real payment.
+  No external gambling API.
+*/
+
+
+/* -----------------------------------------------
+   COOKIE FUNCTIONS
+------------------------------------------------ */
+
+function setCookie(name,value,days){
+
+    const date = new Date();
+
+    date.setTime(
+        date.getTime() +
+        (days * 24 * 60 * 60 * 1000)
+    );
+
+    document.cookie =
+        name + "=" +
+        encodeURIComponent(value) +
+        ";expires=" +
+        date.toUTCString() +
+        ";path=/";
+}
+
+
+function getCookie(name){
+
+    const cookies =
+        document.cookie.split("; ");
+
+    for(const cookie of cookies){
+
+        const parts =
+            cookie.split("=");
+
+        if(parts[0] === name){
+
+            return decodeURIComponent(
+                parts.slice(1).join("=")
+            );
+        }
+    }
+
+    return null;
+}
+
+
+/* -----------------------------------------------
+   USER DATA
+------------------------------------------------ */
+
+let user =
+    JSON.parse(
+        localStorage.getItem("demoUser")
+    );
+
+
+if(!user){
+
+    user = {
+
+        username:
+            "player" +
+            Math.floor(
+                100000 +
+                Math.random()*899999
+            ),
+
+        id:
+            Math.floor(
+                10000000 +
+                Math.random()*89999999
+            ),
+
+        balance:150,
+
+        bonusClaimed:false,
+
+        history:[]
+
+    };
+
+    localStorage.setItem(
+        "demoUser",
+        JSON.stringify(user)
+    );
+
+}
+
+
+/* -----------------------------------------------
+   SESSION COOKIE
+------------------------------------------------ */
+
+if(!getCookie("demo_session")){
+
+    setCookie(
+        "demo_session",
+        "session_" +
+        Math.random()
+        .toString(36)
+        .substring(2),
+        7
+    );
+
+}
+
+
+/* -----------------------------------------------
+   UI UPDATE
+------------------------------------------------ */
+
+function updateUI(){
+
+    document.getElementById(
+        "username"
+    ).textContent =
+        user.username;
+
+    document.getElementById(
+        "playerId"
+    ).textContent =
+        "ID: " + user.id;
+
+    document.getElementById(
+        "balance"
+    ).textContent =
+        Number(user.balance)
+        .toFixed(2);
+
+    document.getElementById(
+        "storageDisplay"
+    ).textContent =
+        JSON.stringify(user,null,2);
+
+}
+
+
+/* -----------------------------------------------
+   SAVE USER
+------------------------------------------------ */
+
+function saveUser(){
+
+    localStorage.setItem(
+        "demoUser",
+        JSON.stringify(user)
+    );
+
+    updateUI();
+
+}
+
+
+/* -----------------------------------------------
+   BONUS
+------------------------------------------------ */
+
+function showBonus(){
+
+    document.getElementById(
+        "bonusModal"
+    ).style.display="flex";
+
+}
+
+
+function claimBonus(){
+
+    if(!user.bonusClaimed){
+
+        user.balance += 150;
+
+        user.bonusClaimed = true;
+
+        user.history.push({
+
+            type:"bonus",
+
+            amount:150,
+
+            time:new Date()
+                .toLocaleString()
+
+        });
+
+        saveUser();
+
+    }
+
+    closeModal("bonusModal");
+
+}
+
+
+/* -----------------------------------------------
+   GAME
+------------------------------------------------ */
+
+let currentGame="Demo Game";
+
+const symbols=[
+    "🐯",
+    "🐂",
+    "🐰",
+    "🐷",
+    "🍊",
+    "💰",
+    "🎁",
+    "⭐"
+];
+
+
+function openGame(name){
+
+    currentGame=name;
+
+    document.getElementById(
+        "gameTitle"
+    ).textContent=name;
+
+    document.getElementById(
+        "gameModal"
+    ).style.display="flex";
+
+    document.getElementById(
+        "result"
+    ).textContent="";
+
+}
+
+
+function spinGame(){
+
+    const bet=5;
+
+    if(user.balance < bet){
+
+        document.getElementById(
+            "result"
+        ).textContent =
+            "Insufficient demo credits.";
+
+        return;
+
+    }
+
+
+    /*
+       Deduct fake bet
+    */
+
+    user.balance -= bet;
+
+
+    const a =
+        symbols[
+            Math.floor(
+                Math.random()*symbols.length
+            )
+        ];
+
+    const b =
+        symbols[
+            Math.floor(
+                Math.random()*symbols.length
+            )
+        ];
+
+    const c =
+        symbols[
+            Math.floor(
+                Math.random()*symbols.length
+            )
+        ];
+
+
+    document.getElementById("r1")
+        .textContent=a;
+
+    document.getElementById("r2")
+        .textContent=b;
+
+    document.getElementById("r3")
+        .textContent=c;
+
+
+    let winnings=0;
+
+
+    /*
+       Completely artificial demo
+       winning rules
+    */
+
+    if(a===b && b===c){
+
+        winnings=50;
+
+    }
+
+    else if(a===b || b===c || a===c){
+
+        winnings=10;
+
+    }
+
+
+    if(winnings>0){
+
+        user.balance += winnings;
+
+        document.getElementById(
+            "result"
+        ).textContent =
+            "🎉 Demo win: ₹" +
+            winnings.toFixed(2);
+
+    }
+
+    else{
+
+        document.getElementById(
+            "result"
+        ).textContent =
+            "No win this spin.";
+
+    }
+
+
+    user.history.push({
+
+        type:"spin",
+
+        game:currentGame,
+
+        bet:bet,
+
+        win:winnings,
+
+        time:
+            new Date()
+            .toLocaleString()
+
+    });
+
+
+    saveUser();
+
+}
+
+
+/* -----------------------------------------------
+   DEPOSIT DEMO
+------------------------------------------------ */
+
+function showDeposit(){
+
+    document.getElementById(
+        "depositModal"
+    ).style.display="flex";
+
+}
+
+
+/* -----------------------------------------------
+   STORAGE
+------------------------------------------------ */
+
+function showStorage(){
+
+    document.querySelector(
+        ".storage"
+    ).scrollIntoView({
+        behavior:"smooth"
+    });
+
+}
+
+
+function clearBrowserData(){
+
+    /*
+       Remove this site's localStorage.
+    */
+
+    localStorage.removeItem(
+        "demoUser"
+    );
+
+
+    /*
+       Remove our cookie.
+    */
+
+    document.cookie =
+        "demo_session=;" +
+        "expires=Thu, 01 Jan 1970 00:00:00 UTC;" +
+        "path=/";
+
+
+    /*
+       Reload the page.
+
+       A new demo user will then be created.
+       This demonstrates why clearing browser
+       storage can make a website look like
+       a fresh/new visitor.
+    */
+
+    location.reload();
+
+}
+
+
+/* -----------------------------------------------
+   MODAL
+------------------------------------------------ */
+
+function closeModal(id){
+
+    document.getElementById(
+        id
+    ).style.display="none";
+
+}
+
+
+/* -----------------------------------------------
+   INITIALIZATION
+------------------------------------------------ */
+
+updateUI();
+
+
+/*
+   Demonstration only:
+
+   Show welcome popup on first visit.
+*/
+
+if(!getCookie("welcome_seen")){
+
+    setCookie(
+        "welcome_seen",
+        "yes",
+        7
+    );
+
+    setTimeout(
+        showBonus,
+        800
+    );
+
+}
+
+</script>
+
+</body>
+</html>.rounded-12{border-radius:12px}
 @media(min-width:992px){
   .hero-grid{display:grid; grid-template-columns:1fr 420px; gap:22px; align-items:start}
   .hero-illustration img{height:260px; object-fit:cover}
